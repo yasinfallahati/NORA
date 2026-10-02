@@ -1,0 +1,9 @@
+{
+  "name": "ollama-persian-chat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "رابط گفتگوی فارسی برای مدل‌های محلی Ollama",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

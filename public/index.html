@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#11110f" />
+    <title>چت‌خانه | دستیار محلی Ollama</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand-row">
+          <a class="brand" href="/" aria-label="چت‌خانه، صفحه اصلی">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 36 36" fill="none"><path d="M18 4.5 29.7 11.25v13.5L18 31.5 6.3 24.75v-13.5L18 4.5Z" stroke="currentColor" stroke-width="1.6"/><path d="m12 14.4 6 3.6 6-3.6M18 18v7.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14.4" r="1.5" fill="currentColor"/><circle cx="24" cy="14.4" r="1.5" fill="currentColor"/></svg>
+            </span>
+            <span class="brand-name">چت‌خانه<span class="brand-dot">.</span></span>
+          </a>
+          <button class="icon-button sidebar-close" id="closeSidebar" aria-label="بستن منو" title="بستن منو">×</button>
+        </div>
+        <button class="new-chat-button" id="newChat">
+          <span class="plus-icon">＋</span>
+          <span>گفتگوی تازه</span>
+          <kbd>⌘ K</kbd>
+        </button>
+        <div class="side-label">گفتگوهای اخیر</div>
+        <div class="conversation-list" id="conversationList"></div>
+        <div class="sidebar-bottom">
+          <div class="privacy-card">
+            <span class="privacy-icon">◈</span>
+            <div>
+              <div class="privacy-title">گفتگوی خصوصی</div>
+              <div class="privacy-copy">همه‌چیز روی دستگاه شماست.</div>
+            </div>
+            <span class="privacy-check">●</span>
+          </div>
+          <div class="user-row">
+            <div class="avatar user-avatar">ش</div>
+            <div class="user-meta"><strong>فضای شخصی</strong><span>مدل‌های محلی شما</span></div>
+            <span class="local-pill"><span></span> محلی</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="topbar-start">
+            <button class="icon-button menu-button" id="openSidebar" aria-label="باز کردن منو" title="گفتگوها">☰</button>
+            <div class="breadcrumb"><span>فضای شخصی</span><span class="crumb-slash">/</span><strong id="breadcrumbTitle">گفتگوی تازه</strong></div>
+          </div>
+          <div class="topbar-end">
+            <div class="connection-state" id="connectionState"><span class="connection-dot"></span><span id="connectionText">در حال اتصال</span></div>
+            <label class="mode-picker">
+              <span class="sr-only">نوع کار</span>
+              <select id="modeSelect" aria-label="انتخاب نوع کار">
+                <option value="chat">گفتگو</option>
+                <option value="image">تولید تصویر</option>
+              </select>
+              <span class="select-chevron">⌄</span>
+            </label>
+            <div class="model-picker">
+              <span class="model-indicator"></span>
+              <select id="modelSelect" aria-label="انتخاب مدل گفتگو"></select>
+              <select id="imageModelSelect" aria-label="انتخاب مدل تصویر" hidden></select>
+              <span class="select-chevron">⌄</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="chat-area" id="chatArea">
+          <div class="welcome" id="welcome">
+            <div class="welcome-orbit">
+              <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+              <div class="welcome-core">
+                <svg viewBox="0 0 36 36" fill="none"><path d="M18 4.5 29.7 11.25v13.5L18 31.5 6.3 24.75v-13.5L18 4.5Z" stroke="currentColor" stroke-width="1.5"/><path d="m12 14.4 6 3.6 6-3.6M18 18v7.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14.4" r="1.4" fill="currentColor"/><circle cx="24" cy="14.4" r="1.4" fill="currentColor"/></svg>
+              </div>
+              <span class="orbit-spark spark-a">✳</span><span class="orbit-spark spark-b">✦</span>
+            </div>
+            <div class="eyebrow"><span></span> دستیار هوشمند، روی دستگاه شما</div>
+            <h1 id="welcomeTitle">از کجا شروع کنیم<span class="heading-dot">؟</span></h1>
+            <p class="welcome-copy" id="welcomeCopy">یک سؤال بپرسید، ایده‌ای را دنبال کنید یا فقط گپ بزنید.<br />من اینجا هستم تا کمک کنم.</p>
+            <div class="suggestion-grid" id="suggestionGrid">
+              <button class="suggestion-card" data-prompt="برای یک روز آرام و مفید، یک برنامه‌ی ساده پیشنهاد بده.">
+                <span class="suggestion-icon warm">✳</span><span class="suggestion-title">برنامه‌ریزی روزانه</span><span class="suggestion-subtitle">کمک کن روزم را بهتر بچینم</span><span class="suggestion-arrow">↙</span>
+              </button>
+              <button class="suggestion-card" data-prompt="مفهوم یادگیری ماشین را با یک مثال ساده توضیح بده.">
+                <span class="suggestion-icon lavender">⌘</span><span class="suggestion-title">یادگیری یک موضوع</span><span class="suggestion-subtitle">چیز تازه‌ای یاد بگیرم</span><span class="suggestion-arrow">↙</span>
+              </button>
+              <button class="suggestion-card" data-prompt="برای یک داستان کوتاه و خیال‌انگیز، سه ایده‌ی متفاوت پیشنهاد بده.">
+                <span class="suggestion-icon mint">✧</span><span class="suggestion-title">ایده‌پردازی</span><span class="suggestion-subtitle">با هم فکر کنیم و بسازیم</span><span class="suggestion-arrow">↙</span>
+              </button>
+              <button class="suggestion-card" data-prompt="یک متن دوستانه برای دعوت همکارانم به یک دورهمی بنویس.">
+                <span class="suggestion-icon blue">↗</span><span class="suggestion-title">نوشتن یک متن</span><span class="suggestion-subtitle">پیش‌نویسش را با هم بسازیم</span><span class="suggestion-arrow">↙</span>
+              </button>
+            </div>
+          </div>
+          <div class="messages" id="messages" aria-live="polite"></div>
+        </section>
+
+        <footer class="composer-wrap">
+          <form class="composer" id="chatForm">
+            <textarea id="messageInput" rows="1" placeholder="هر چیزی که در ذهن دارید بپرسید..." aria-label="پیام شما"></textarea>
+            <div class="composer-toolbar">
+              <div class="composer-hint"><span class="hint-spark">✳</span><span id="composerDescription">پاسخ‌ها با <strong id="activeModelLabel">مدل محلی</strong> ساخته می‌شوند</span></div>
+              <div class="composer-actions">
+                <span class="send-hint">ارسال <kbd>↵</kbd></span>
+                <button class="send-button" id="sendButton" type="submit" aria-label="ارسال پیام" title="ارسال پیام">
+                  <svg class="send-icon" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <svg class="stop-icon" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
+                </button>
+              </div>
+            </div>
+          </form>
+          <p class="disclaimer">مدل‌های هوش مصنوعی ممکن است اشتباه کنند. پاسخ‌های مهم را بررسی کنید.</p>
+        </footer>
+      </main>
+    </div>
+    <div class="mobile-backdrop" id="mobileBackdrop"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>
