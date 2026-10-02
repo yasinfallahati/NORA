@@ -27,21 +27,24 @@
           <span>گفتگوی تازه</span>
           <kbd>⌘ K</kbd>
         </button>
+        <input class="chat-search" id="searchInput" type="search" placeholder="جستجو در گفتگوها" aria-label="جستجو در گفتگوها" />
         <div class="side-label">گفتگوهای اخیر</div>
         <div class="conversation-list" id="conversationList"></div>
         <div class="sidebar-bottom">
+          <button class="side-tool" id="openApi" type="button">اتصال API</button>
+          <button class="side-tool" id="openMemory" type="button">حافظه</button>
           <div class="privacy-card">
             <span class="privacy-icon">◈</span>
             <div>
               <div class="privacy-title">گفتگوی خصوصی</div>
-              <div class="privacy-copy">همه‌چیز روی دستگاه شماست.</div>
+              <div class="privacy-copy" id="privacyCopy">همه‌چیز روی دستگاه شماست.</div>
             </div>
             <span class="privacy-check">●</span>
           </div>
           <div class="user-row">
             <div class="avatar user-avatar">ش</div>
             <div class="user-meta"><strong>فضای شخصی</strong><span>مدل‌های محلی شما</span></div>
-            <span class="local-pill"><span></span> محلی</span>
+            <span class="local-pill" id="sourcePill"><span></span> محلی</span>
           </div>
         </div>
       </aside>
@@ -103,9 +106,16 @@
 
         <footer class="composer-wrap">
           <form class="composer" id="chatForm">
+            <div class="attachment-tray" id="attachmentTray"></div>
             <textarea id="messageInput" rows="1" placeholder="هر چیزی که در ذهن دارید بپرسید..." aria-label="پیام شما"></textarea>
             <div class="composer-toolbar">
-              <div class="composer-hint"><span class="hint-spark">✳</span><span id="composerDescription">پاسخ‌ها با <strong id="activeModelLabel">مدل محلی</strong> ساخته می‌شوند</span></div>
+              <div class="composer-hint">
+                <button class="attach-button" id="attachButton" type="button" aria-label="پیوست فایل" title="پیوست تصویر یا فایل">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="m8 12.5 6.2-6.2a3 3 0 0 1 4.2 4.2l-7.4 7.5a4.5 4.5 0 0 1-6.4-6.4l7.2-7.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </button>
+                <input id="fileInput" type="file" hidden multiple accept="image/png,image/jpeg,image/webp,image/gif,.txt,.md,.json,.csv,.pdf" />
+                <span class="hint-spark">✳</span><span id="composerDescription">پاسخ‌ها با <strong id="activeModelLabel">مدل محلی</strong> ساخته می‌شوند</span>
+              </div>
               <div class="composer-actions">
                 <span class="send-hint">ارسال <kbd>↵</kbd></span>
                 <button class="send-button" id="sendButton" type="submit" aria-label="ارسال پیام" title="ارسال پیام">
@@ -115,11 +125,65 @@
               </div>
             </div>
           </form>
+          <p class="composer-error" id="composerError" hidden></p>
           <p class="disclaimer">مدل‌های هوش مصنوعی ممکن است اشتباه کنند. پاسخ‌های مهم را بررسی کنید.</p>
         </footer>
       </main>
     </div>
     <div class="mobile-backdrop" id="mobileBackdrop"></div>
+    <div class="modal" id="apiModal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="apiTitle">
+        <h2 id="apiTitle">اتصال API</h2>
+        <p class="modal-copy">آدرس باید سازگار با OpenAI باشد، مثل <span dir="ltr">https://api.openai.com/v1</span>. کلید فقط روی همین دستگاه ذخیره می‌شود.</p>
+        <div class="field">
+          <span>گفتگو</span>
+          <div class="choice-row" id="chatProviderChoices">
+            <button type="button" data-value="local">Ollama</button>
+            <button type="button" data-value="api">API</button>
+          </div>
+        </div>
+        <div class="field">
+          <span>ساخت تصویر</span>
+          <div class="choice-row" id="imageProviderChoices">
+            <button type="button" data-value="local">مدل داخل پروژه</button>
+            <button type="button" data-value="api">API</button>
+          </div>
+        </div>
+        <label class="field">آدرس پایه
+          <input id="apiBaseUrl" type="url" inputmode="url" placeholder="https://api.openai.com/v1" autocomplete="off" />
+        </label>
+        <label class="field">کلید API
+          <input id="apiKey" type="password" placeholder="اگر سرویس محلی کلید نمی‌خواهد، خالی بگذارید" autocomplete="off" />
+        </label>
+        <label class="field">مدل گفتگو
+          <input id="apiChatModelInput" placeholder="بعد از بررسی اتصال پر می‌شود" autocomplete="off" />
+          <select id="apiChatModelPick" aria-label="فهرست مدل‌های گفتگو"></select>
+        </label>
+        <label class="field">مدل تصویر
+          <input id="apiImageModelInput" placeholder="فقط اگر API ساخت تصویر دارد" autocomplete="off" />
+          <select id="apiImageModelPick" aria-label="فهرست مدل‌های تصویر"></select>
+        </label>
+        <label class="check-row"><input id="memoryEnabled" type="checkbox" checked /> حافظه روشن باشد و گفتگوها را به خاطر بسپارد</label>
+        <p class="modal-note" id="apiNote"></p>
+        <div class="modal-actions">
+          <button class="side-tool" id="probeApi" type="button">بررسی اتصال</button>
+          <button class="side-tool accent" id="saveApi" type="button">ذخیره</button>
+          <button class="text-button" id="clearApiKey" type="button">حذف کلید</button>
+          <button class="text-button" id="closeApi" type="button">بستن</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="memoryModal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="memoryTitle">
+        <h2 id="memoryTitle">حافظه</h2>
+        <p class="modal-copy">یادداشت‌ها روی همین دستگاه می‌مانند. در هر پاسخ، موارد مرتبط به مدل داده می‌شود.</p>
+        <div class="memory-list" id="memoryList"></div>
+        <div class="modal-actions">
+          <button class="text-button" id="clearMemory" type="button">پاک کردن حافظه</button>
+          <button class="text-button" id="closeMemory" type="button">بستن</button>
+        </div>
+      </div>
+    </div>
     <script src="/app.js"></script>
   </body>
 </html>

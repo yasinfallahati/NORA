@@ -32,7 +32,7 @@ button { color: inherit; }
 kbd { font: 10px "DM Mono", monospace; color: #77776f; background: #282824; border: 1px solid #34342e; border-radius: 4px; padding: 2px 5px; }
 .new-chat-button kbd { margin-right: auto; }
 .side-label { color: #74746d; font-size: 10px; margin: 29px 9px 10px; }
-.conversation-list { overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.conversation-list { overflow-y: auto; display: flex; flex: 1; min-height: 0; flex-direction: column; gap: 4px; }
 .conversation-item { width: 100%; display: flex; align-items: center; gap: 9px; min-height: 37px; padding: 7px 9px; border: 0; border-radius: 7px; color: #a09f97; background: transparent; font-size: 11px; text-align: right; cursor: pointer; }
 .conversation-item:hover, .conversation-item.active { background: #22221e; color: #eeede6; }
 .conversation-item .chat-icon { color: #71716a; font-size: 14px; }
@@ -130,7 +130,7 @@ kbd { font: 10px "DM Mono", monospace; color: #77776f; background: #282824; bord
 .composer textarea { display: block; width: 100%; max-height: 160px; min-height: 36px; resize: none; padding: 4px 1px 8px; border: 0; outline: 0; color: #ecebe2; background: transparent; font-size: 11px; line-height: 1.8; }
 .composer textarea::placeholder { color: #77776f; }
 .composer-toolbar { justify-content: space-between; min-height: 28px; }
-.composer-hint { display: flex; align-items: center; gap: 6px; color: #717169; font-size: 9px; }
+.composer-hint { display: flex; align-items: center; gap: 6px; min-width: 0; color: #717169; font-size: 9px; }
 .composer-hint strong { color: #9da58a; font-weight: 500; }
 .hint-spark { color: #a6bd74; font-size: 13px; }
 .composer-actions { gap: 10px; }
@@ -144,6 +144,8 @@ kbd { font: 10px "DM Mono", monospace; color: #77776f; background: #282824; bord
 .send-button.is-generating .send-icon { display: none; }
 .send-button.is-generating .stop-icon { display: block; }
 .disclaimer { margin: 7px 0 0; color: #606059; font-size: 8px; text-align: center; }
+.composer-error { margin: 7px 0 0; color: #e49a8c; font-size: 10px; text-align: center; }
+.composer-error[hidden] { display: none; }
 .mobile-backdrop { display: none; }
 
 @media (min-width: 1200px) {
@@ -181,4 +183,45 @@ kbd { font: 10px "DM Mono", monospace; color: #77776f; background: #282824; bord
   .suggestion-subtitle { font-size: 8px; }
   .composer-hint { font-size: 8px; }
   .send-hint { display: none; }
+  .modal-card { max-height: 90vh; }
 }
+.chat-search, .side-tool, .field input, .field select, .attach-button, .copy-button, .text-button, .choice-row button { font: inherit; }
+.chat-search { width: calc(100% - 8px); height: 34px; margin: 14px 4px 0; padding: 0 9px; border: 1px solid #2c2c27; border-radius: 8px; background: #11110f; color: var(--text); font-size: 11px; }
+.chat-search::placeholder { color: #6d6d66; }
+.side-tool { width: 100%; height: 34px; margin-bottom: 8px; border: 1px solid #30302a; border-radius: 8px; background: #20201d; color: #d4d3c9; font-size: 11px; cursor: pointer; }
+.side-tool:hover, .choice-row button:hover, .attach-button:hover { border-color: #4b4d3e; }
+.side-tool.accent { background: #2a3120; color: #d7e8a5; }
+.modal { position: fixed; z-index: 20; inset: 0; display: flex; align-items: center; justify-content: center; padding: 18px; background: #0008; }
+.modal[hidden] { display: none; }
+.modal-card { width: min(440px, 100%); max-height: min(86vh, 680px); overflow: auto; padding: 16px 16px 14px; border: 1px solid #30302a; border-radius: 12px; background: #171715; }
+.modal-card h2 { margin: 0; color: #eeede6; font-size: 15px; font-weight: 500; }
+.modal-copy, .modal-note { margin: 8px 0 0; color: #88877f; font-size: 11px; line-height: 1.8; }
+.modal-note:empty { display: none; }
+.field { display: flex; flex-direction: column; gap: 5px; margin-top: 12px; color: #aaa99f; font-size: 10px; }
+.field input, .field select { width: 100%; height: 34px; padding: 0 8px; border: 1px solid #30302a; border-radius: 7px; background: #11110f; color: var(--text); }
+.field select:empty, .field select:not(:has(option)) { display: none; }
+.check-row { display: flex; align-items: center; gap: 8px; margin-top: 14px; color: #c4c3ba; font-size: 11px; }
+.choice-row { display: flex; gap: 8px; }
+.choice-row button { flex: 1; height: 34px; border: 1px solid #30302a; border-radius: 8px; background: #11110f; color: #aaa99f; cursor: pointer; }
+.choice-row button[aria-pressed="true"] { border-color: #596345; background: #23281d; color: #d7e8a5; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+.modal-actions .side-tool { width: auto; min-width: 104px; margin: 0; padding: 0 10px; }
+.text-button { border: 0; background: transparent; color: #8d8d84; font-size: 11px; cursor: pointer; }
+.memory-list { display: flex; flex-direction: column; margin-top: 12px; }
+.memory-item { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #262622; color: #d1d0c8; font-size: 11px; line-height: 1.7; }
+.memory-item p { margin: 0; overflow-wrap: anywhere; }
+.memory-item span { flex: 0 0 auto; color: #77776f; font-size: 9px; }
+.memory-empty { color: #77776f; font-size: 11px; }
+.attachment-tray { display: flex; flex-wrap: wrap; gap: 6px; }
+.attachment-tray:empty { display: none; }
+.file-chip, .message-files { display: flex; flex-wrap: wrap; gap: 6px; }
+.file-chip { align-items: center; max-width: 210px; padding: 4px 6px; border: 1px solid #30302a; border-radius: 7px; color: #c4c3ba; font-size: 9px; }
+.file-chip img, .message-files img { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; }
+.file-chip span, .message-files a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.message-files { margin-bottom: 6px; }
+.message-files a { color: #c6c5bc; font-size: 10px; }
+.file-chip button, .memory-item button, .copy-button { border: 0; background: transparent; color: #8a8a82; cursor: pointer; }
+.attach-button { display: grid; flex: 0 0 auto; place-items: center; width: 28px; height: 28px; border: 1px solid #34342e; border-radius: 7px; background: transparent; color: #b7b6ac; cursor: pointer; }
+.attach-button svg { width: 15px; height: 15px; }
+.copy-button { margin-top: 6px; padding: 0; font-size: 9px; }
+.copy-button:hover, .text-button:hover { color: #d7e8a5; }
