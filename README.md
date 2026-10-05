@@ -1,83 +1,54 @@
-<div align="center">
-
-<img src="./docs/assets/banner.svg" alt="NORA" width="100%" />
-
-</div>
+<p align="center"><img src="docs/assets/hero.png" width="100%" alt="NORA"></p>
 
 # NORA
+## Private AI that never leaves your LAN
 
-**Private AI chat & image studio that stays on your machine.**
+<p align="center">
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+<img src="https://img.shields.io/badge/Ollama-000000?style=for-the-badge">
+<img src="https://img.shields.io/badge/ComfyUI-C084FC?style=for-the-badge">
+<img src="https://img.shields.io/badge/OpenAI--compatible-412991?style=for-the-badge">
+<img src="https://img.shields.io/badge/Persian_UI-0F172A?style=for-the-badge">
+</p>
 
----
+<p align="center"><img src="docs/assets/screenshot.png" width="100%" alt="NORA UI"></p>
 
-## English
+NORA is a **local chat & image studio**: Node static+API server on `127.0.0.1`, Persian system identity (“من Nora هستم و توسط یاسین ساخته شدم”), optional ComfyUI image path, and OpenAI-compatible upstreams when you want them — without shipping your prompts to a random SaaS by default.
 
-<p align="center"><img src="docs/banner.jpg" alt="NORA banner" width="100%" /></p>
-
-
-Persian-first assistant for local models and OpenAI-compatible APIs — chat, image generation, file uploads, and durable memory in one interface.
-
-### Features
-
-- Streamed chat via Ollama or any OpenAI-compatible endpoint
-- Local image generation through ComfyUI (or images API when available)
-- Attach images, text, CSV, Markdown, or PDF to a turn
-- On-disk memory under `data/`
-- API widget to switch providers and probe models
-- Server binds to `127.0.0.1` only
-
-### Stack
-
-Node.js 18+ · Ollama · ComfyUI · OpenAI-compatible APIs
-
-### Getting started
+### Start
 
 ```bash
-git clone https://github.com/yasinfallahati/NORA.git
-cd NORA
-npm install
-npm start
+# Ollama running locally recommended
+npm start          # → http://127.0.0.1:3000
+# optional:
+OLLAMA_URL=http://127.0.0.1:11434 COMFYUI_URL=http://127.0.0.1:8188 npm start
 ```
-Open the local UI (see README / package scripts). Keys stay on your machine.
 
+Image helper: `start-image-backend.sh`. Extra art in `docs/banner.jpg` / `docs/preview.jpg`.
 
-## License
-
-See repository `LICENSE` (private / project terms).
+| Concern | Choice |
+|---------|--------|
+| Bind | localhost only by default |
+| Chat | Ollama / compatible APIs via `lib/upstream` |
+| Images | ComfyUI hook + `[[image: …]]` instruction channel |
+| Store | Local via `lib/store` |
 
 ---
 
-## فارسی
+## فارسی — نورا
 
-### نورا
+**استودیوی چت و تصویر هوش مصنوعی محلی.** سرور Node فقط روی لوکال‌هاست، هویت فارسی ثابت، اتصال به Ollama و در صورت نیاز ComfyUI یا APIهای سازگار با OpenAI. هدف: حریم خصوصی و کار آفلاین/LAN، نه وابستگی اجباری به کلود.
 
-استودیوی خصوصی چت و تصویر هوش مصنوعی — روی دستگاه خودتان.
-
-دستیار فارسی‌محور برای مدل‌های محلی و APIهای سازگار با OpenAI — چت، تولید تصویر، آپلود فایل و حافظه پایدار.
-
-### امکانات
-
-- چت جریانی با Ollama یا هر endpoint سازگار با OpenAI
-- تولید تصویر محلی با ComfyUI (یا API تصویر در صورت وجود)
-- پیوست تصویر، متن، CSV، Markdown یا PDF
-- حافظه روی دیسک در پوشه `data/`
-- ویجت API برای تعویض ارائه‌دهنده و بررسی مدل‌ها
-- سرور فقط روی `127.0.0.1`
-
-### تکنولوژی‌ها
-
-Node.js 18+ · Ollama · ComfyUI · OpenAI-compatible APIs
-
-### شروع کار
+### اجرا
 
 ```bash
-git clone https://github.com/yasinfallahati/NORA.git
-cd NORA
-npm install
-npm start
+npm start   # http://127.0.0.1:3000
 ```
-رابط محلی را باز کنید. کلیدها روی دستگاه خودتان می‌مانند.
 
----
+### ارزش پیشنهادی
 
-`#ai` `#ollama` `#comfyui` `#nodejs` `#local-ai` `#persian` `#chat` `#privacy`
+- داده گفتگو روی ماشین خودتان می‌ماند  
+- مناسب دموی «AI خصوصی» برای مشتریانی که کلود را نمی‌پذیرند  
+- UI فارسی آماده برای کاربر غیرتکنیکال  
+
+لایسنس و جزئیات بیشتر در خود مخزن؛ برای تصویر، بک‌اند Comfy را جدا بالا بیاورید.
